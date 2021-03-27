@@ -1,0 +1,75 @@
+Transmitters are numbered from 0 to 3
+
+From the Host to the Dongle:
+
+"u:" [:digit:] ':' [:digit:]+
+
+this tells the the host that the transmitter in the first number (0-3) has gone key up for the number of twitches specified by the second number, either as a result of manipulation of the paddles or per command.
+
+"d:" [:digit:] ':' [:digit:]+
+
+this tells the transmitter in the first number (0-3) to go key down for the number of twitches in the second digit.
+
+If the transmitter is not currently in transmit mode, the PTT is triggered as well, and if the PTT transitions, then the transmission is delayed for the number of milliseconds of the specified transmit delay.
+
+"c:" [:digit:]
+
+Request the configure of the transmitter corresponding to digit in a "c" message.
+
+"kdd:" [:digit:] ":" [:digit:]+
+
+Set the key down delay of the transmitter specified as the first argument to the value of the second number in milliseconds
+
+The default will be zero
+
+"kud:" [:digit:] ":" [:digit:]+
+
+Set the key up delay of the transmitter specified as the first argument ot the value of the second number in twitches.  Note that this delay is in twitches, so it depends on the transmit speed.  The default will be 7
+
+"t:" [:digit:]
+
+Make the transmitter specified in the argument by the default transmitter, that is the one that is triggered by the paddles
+
+"pm:" (a|b|s|m|u)
+
+Select the paddle mode.  The argument gives the new mode:
+
+a:  "Iambic-A"
+b:  "Iambic-B" (not currently implemented)
+s:  "Semiautomatic" or "bug" mode
+m:  "Manual" or "cootie" mode
+u:  "ultimatic", whatever that is (not currently implemented)
+
+"pr"
+
+Toggle the paddle reverse
+
+From the Dongle to the Host:
+
+"a"
+
+means that the last command was received successfully
+
+"xoff:" [:digit:]
+
+tells the host to stop sending commands for the given transmitter until it can catch up
+
+"xon:" [:digit:]
+
+tells the host to continue sending commands for the given transmitter because it has caught up
+
+"u:" [:digit:] ':' [:digit:]+
+
+this tells the the host that the transmitter in the first number (0-3) has gone key up for the number of twitches specified by the second number, either as a result of manipulation of the paddles or per command.
+
+"d:" [:digit:] ':' [:digit:]+
+
+this tells the the host that the transmitter in the first number (0-3) has gone key down for the number of twitches specified by the second number, either as a result of manipulation of the paddles or per command.
+
+"s:" [:digit:]+
+
+tells the host that the speed potentiometer is at the given percent of it's maximum value
+
+"c:" transmitter ":" active_flag ":" wpm_value ":" key_down_delay_ms ":" key_up_delay_twitches
+
+Report the status of the specified transmitter.  The "active_flag" will be "1" if this transmitter is "active" (that is it will be keyed by manipulating the paddles) and 0 otherwise
